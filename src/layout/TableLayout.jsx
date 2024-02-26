@@ -1,5 +1,7 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Table } from "antd";
+import { getAllUsers } from "../service/api-users";
 const columns = [
   {
     title: "Name",
@@ -23,47 +25,33 @@ const columns = [
     render: () => <a>Delete</a>,
   },
 ];
-const data = [
-  {
-    key: 1,
-    name: "John Brown",
-    username: 32,
-    email: "New York No. 1 Lake Park",
-    description:
-      "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-  },
-  {
-    key: 2,
-    name: "Jim Green",
-    username: 42,
-    email: "London No. 1 Lake Park",
-    description:
-      "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.",
-  },
-  {
-    key: 3,
-    name: "Not Expandable",
-    username: 29,
-    email: "Jiangsu No. 1 Lake Park",
-    description: "This not expandable",
-  },
-  {
-    key: 4,
-    name: "Joe Black",
-    username: 32,
-    email: "Sydney No. 1 Lake Park",
-    description:
-      "My name is Joe Black, I am 32 years old, living in Sydney No. 1 Lake Park.",
-  },
-];
-const TableLayout = () => (
-  <Table
-    columns={columns}
-    expandable={{
-      
-      rowExpandable: (record) => record.name !== "Not Expandable",
-    }}
-    dataSource={data}
-  />
-);
+
+const TableLayout = () => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
+  });
+
+  console.log(data);
+
+  return (
+    <div className="container grid h-screen">
+      {isLoading ? (
+        <div className=" grid justify-center text-3xl font-bold p-2">
+          Loading...
+        </div>
+      ) : error ? (
+        <div>Error: {error.message}</div>
+      ) : (
+        <Table
+          columns={columns}
+          expandable={{
+            rowExpandable: (record) => record.name !== "Not Expandable",
+          }}
+          dataSource={data}
+        />
+      )}
+    </div>
+  );
+};
 export default TableLayout;
