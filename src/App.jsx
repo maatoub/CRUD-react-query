@@ -1,13 +1,16 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import TableLayout from "./layout/TableLayout";
+import HeaderLayout from "./layout/Header";
 
 function App() {
-
   return (
     <>
-      <h1>hi...</h1>
+      <HeaderLayout />
+
+      <TableLayout />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
